@@ -1,0 +1,17 @@
+{
+  "name": "purple_currency_converter",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "start": "npm run build -- -w"
+  },
+  "keywords": [],
+  "author": "Martin Putniorz <mputniorz@gmail.com>",
+  "license": "WTFPL",
+  "type": "commonjs",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

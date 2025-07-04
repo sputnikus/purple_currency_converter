@@ -1,3 +1,6 @@
+import { Request } from "express";
+
+const apiKey = process.env.CURRENCYLAYER_API_KEY;
 var conversionCounter = 0;
 
 interface ConverterData {
@@ -10,24 +13,35 @@ interface ConversionResult {
   result: number;
 }
 
-function getConverterInput(): ConverterData {
-  const amount = document.getElementById("amount") as HTMLInputElement;
-  const from = document.getElementById("from-currency") as HTMLInputElement;
-  const to = document.getElementById("to-currency") as HTMLInputElement;
+interface RenderData {
+  value: string;
+  currency: string;
+  conversionCount: number;
+  error: Error | null;
+}
 
-  return { amount: amount.valueAsNumber, from: from.value, to: to.value };
+function getConverterInput(request_body: any): ConverterData {
+  return {
+    amount: request_body.amount as number,
+    from: request_body.from_currency as string,
+    to: request_body.to_currency as string,
+  };
 }
 
 async function getConversion(
   input: ConverterData,
 ): Promise<ConversionResult | never> {
+  if (!apiKey) {
+    throw new Error("CURRENCYLAYER_API_KEY environment variable is not set");
+  }
+
   let queryString = [
     `amount=${input.amount}`,
     `from=${input.from}`,
     `to=${input.to}`,
     `format=1`,
     // deprecate before backend migration
-    `access_key=f9c3b630ff67198e98d6fd5486bf66e5`,
+    `access_key=${apiKey}`,
   ].join("&");
 
   try {
@@ -61,24 +75,23 @@ async function getConversion(
   }
 }
 
-function convert() {
-  const formData = getConverterInput();
-  getConversion(formData)
-    .then((conversionResult) => {
-      document.querySelector(".result-value")!.textContent =
-        // should be Intl(ed)
-        `${conversionResult.result.toFixed(2)} ${formData.to}`;
-      conversionCounter += 1;
-      document.querySelector(".calculation-count")!.textContent =
-        `${conversionCounter}`;
-    })
-    .catch((error) => {
-      const resCard = document.querySelector(".result-card")!;
-      const errorText = document.createElement("span");
-      errorText.textContent = `Error: ${error.message}`;
-      errorText.setAttribute("class", "error-message");
-      resCard.appendChild(errorText);
-    });
+export async function convert(request: Request): Promise<RenderData> {
+  const formData = getConverterInput(request.body);
+  conversionCounter += 1;
+  try {
+    const conversionResult = await getConversion(formData);
+    return {
+      value: conversionResult.result.toFixed(2),
+      currency: formData.to,
+      conversionCount: conversionCounter,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      value: "0",
+      currency: formData.to,
+      conversionCount: conversionCounter,
+      error: error as Error,
+    };
+  }
 }
-
-document.querySelector(".convert-btn")!.addEventListener("click", convert);

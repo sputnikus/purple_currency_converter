@@ -1,13 +1,27 @@
 # Purple Currency Converter
 
-This is a minimal starter project for building web pages using TypeScript and HTML. TypeScript code is compiled to JavaScript and included in your HTML page.
+A web-based currency converter application built with TypeScript, Express, and Nunjucks templating engine. Uses the CurrencyLayer API for real-time currency conversion rates.
 
 ## Features
 
-- TypeScript development with strict type checking
-- Simple build scripts using npm
-- Output JavaScript placed in the `dist/` directory
-- Ready-to-edit HTML file
+- Real-time currency conversion using CurrencyLayer API
+- Server-side rendering with Nunjucks templates
+- TypeScript for type-safe development
+- Express.js backend
+- Modern async/await API handling
+
+## Prerequisites
+
+- Node.js and npm
+- CurrencyLayer API key
+
+## Environment Setup
+
+1. Configure your CurrencyLayer API key in mise:
+
+```bash
+export CURRENCYLAYER_API_KEY=your_api_key_here
+```
 
 ## Getting Started
 
@@ -19,21 +33,19 @@ npm install
 
 ### 2. Build the Project
 
-Compile TypeScript files from `src/` into JavaScript files in `dist/`:
-
 ```shell
 npm run build
 ```
 
-Or start the TypeScript compiler in watch mode for automatic rebuilding on file changes:
+### 3. Development
+
+Start the development server:
 
 ```shell
 npm start
 ```
 
-### 3. Open the HTML Page
-
-Open `index.html` in your browser.
+The application will be available at `http://localhost:3000`
 
 ## License
 

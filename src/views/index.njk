@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Purple Currency Converter</title>
+        <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
         <style>
             * {
                 margin: 0;
@@ -204,64 +205,54 @@
             <h1 class="title">Purple currency converter</h1>
 
             <div class="converter-card">
-                <div class="form-row">
-                    <div class="form-group amount-group">
-                        <label for="amount">Amount to convert</label>
-                        <input
-                            type="number"
-                            id="amount"
-                            value="200"
-                            min="0"
-                            step="0.01"
-                        />
+                <form
+                    hx-post="/conversion"
+                    hx-target=".result-card"
+                    hx-swap="innerHTML"
+                >
+                    <div class="form-row">
+                        <div class="form-group amount-group">
+                            <label for="amount">Amount to convert</label>
+                            <input
+                                type="number"
+                                id="amount"
+                                name="amount"
+                                value="200"
+                                min="0"
+                                step="0.01"
+                            />
+                        </div>
+
+                        <div class="form-group currency-group">
+                            <label for="from_currency">From</label>
+                            <select id="from_currency" name="from_currency">
+                                {% include "partials/currency_list.html" %}
+                            </select>
+                        </div>
+
+                        <div class="form-group currency-group">
+                            <label for="to_currency">To</label>
+                            <select id="to_currency" name="to_currency">
+                                {% include "partials/currency_list.html" %}
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="form-group currency-group">
-                        <label for="from-currency">From</label>
-                        <select id="from-currency">
-                            <option value="EUR" selected>EUR</option>
-                            <option value="USD">USD</option>
-                            <option value="GBP">GBP</option>
-                            <option value="JPY">JPY</option>
-                            <option value="CZK">CZK</option>
-                            <option value="PLN">PLN</option>
-                            <option value="CHF">CHF</option>
-                            <option value="CAD">CAD</option>
-                            <option value="AUD">AUD</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group currency-group">
-                        <label for="to-currency">To</label>
-                        <select id="to-currency">
-                            <option value="EUR">EUR</option>
-                            <option value="USD">USD</option>
-                            <option value="GBP">GBP</option>
-                            <option value="JPY">JPY</option>
-                            <option value="CZK" selected>CZK</option>
-                            <option value="PLN">PLN</option>
-                            <option value="CHF">CHF</option>
-                            <option value="CAD">CAD</option>
-                            <option value="AUD">AUD</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button class="convert-btn" type="button">
-                    Convert currency
-                </button>
+                    <button class="convert-btn" type="submit">
+                        Convert currency
+                    </button>
+                </form>
             </div>
 
             <div class="result-card">
                 <div class="result-label">Result</div>
-                <div class="result-value">4 942,52 CZK</div>
+                <div class="result-value">4942,52 CZK</div>
 
                 <div class="calculation-count-label">
                     Number of calculations made
                 </div>
-                <div class="calculation-count">3</div>
+                <div class="calculation-count">Be the first!</div>
             </div>
         </div>
-        <script src="dist/index.js"></script>
     </body>
 </html>

@@ -5,7 +5,6 @@ import nunjucks = require("nunjucks");
 import { convert } from "./conversion";
 
 const app = express();
-//app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 nunjucks.configure(path.join(__dirname, "views"), {

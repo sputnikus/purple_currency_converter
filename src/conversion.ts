@@ -40,7 +40,6 @@ async function getConversion(
     `from=${input.from}`,
     `to=${input.to}`,
     `format=1`,
-    // deprecate before backend migration
     `access_key=${apiKey}`,
   ].join("&");
 

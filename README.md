@@ -9,6 +9,7 @@ A web-based currency converter application built with TypeScript, Express, and N
 - TypeScript for type-safe development
 - Express.js backend
 - Modern async/await API handling
+- SQLite3 storage
 
 ## Prerequisites
 
@@ -21,6 +22,7 @@ A web-based currency converter application built with TypeScript, Express, and N
 
 ```bash
 export CURRENCYLAYER_API_KEY=your_api_key_here
+export DATABASE_PATH=path_to_sqlite3_file_here
 ```
 
 ## Getting Started
@@ -31,13 +33,19 @@ export CURRENCYLAYER_API_KEY=your_api_key_here
 npm install
 ```
 
-### 2. Build the Project
+### 2. Initialize Database
+
+```shell
+./scripts/create_db.sh $DATABASE_PATH
+```
+
+### 3. Build the Project
 
 ```shell
 npm run build
 ```
 
-### 3. Development
+### 4. Development
 
 Start the development server:
 

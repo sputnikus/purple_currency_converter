@@ -3,6 +3,7 @@ import path from "path";
 import nunjucks = require("nunjucks");
 
 import { convert } from "./conversion";
+import { getConversionCount } from "./storage";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -12,9 +13,16 @@ nunjucks.configure(path.join(__dirname, "views"), {
   express: app,
 });
 
-app.get("/", (req: Request, res: Response) => {
-  // Home page has some includes
-  res.render("index.njk");
+app.get("/", (req: Request, res: Response, next) => {
+  getConversionCount()
+    .then((count) => {
+      // Default result_card must be initialized
+      const data = {
+        conversionCount: count.sum as number,
+      };
+      res.render("index.njk", { data: data });
+    })
+    .catch(next);
 });
 
 app.post("/conversion", (req: Request, res: Response, next) => {

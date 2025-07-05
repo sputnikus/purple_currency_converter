@@ -1,24 +1,9 @@
 import { Request } from "express";
 
+import { ConverterData, ConversionResult, RenderData } from "./interface";
+import { addRequest, addResponse, getConversionCount } from "./storage";
+
 const apiKey = process.env.CURRENCYLAYER_API_KEY;
-var conversionCounter = 0;
-
-interface ConverterData {
-  amount: number;
-  from: string; // currency, should be enum later
-  to: string; // currency, should be enum later
-}
-
-interface ConversionResult {
-  result: number;
-}
-
-interface RenderData {
-  value: string;
-  currency: string;
-  conversionCount: number;
-  error: Error | null;
-}
 
 function getConverterInput(request_body: any): ConverterData {
   return {
@@ -58,11 +43,7 @@ async function getConversion(
       throw new Error(`Error! status: ${response.status}`);
     }
 
-    const result = (await response.json()) as ConversionResult;
-
-    console.log("result is: ", JSON.stringify(result, null, 4));
-
-    return result;
+    return (await response.json()) as ConversionResult;
   } catch (error) {
     if (error instanceof Error) {
       console.log("error message: ", error.message);
@@ -76,20 +57,23 @@ async function getConversion(
 
 export async function convert(request: Request): Promise<RenderData> {
   const formData = getConverterInput(request.body);
-  conversionCounter += 1;
+  await addRequest(formData);
   try {
-    const conversionResult = await getConversion(formData);
+    const conversion = await getConversion(formData);
+    await addResponse(conversion.result, formData.to);
+    const counter = (await getConversionCount()).sum as number;
     return {
-      value: conversionResult.result.toFixed(2),
+      value: conversion.result.toFixed(2),
       currency: formData.to,
-      conversionCount: conversionCounter,
+      conversionCount: counter,
       error: null,
     };
   } catch (error) {
+    const counter = (await getConversionCount()).sum as number;
     return {
       value: "0",
       currency: formData.to,
-      conversionCount: conversionCounter,
+      conversionCount: counter,
       error: error as Error,
     };
   }

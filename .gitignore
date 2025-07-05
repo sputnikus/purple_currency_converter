@@ -145,3 +145,6 @@ dist
 
 # Mise devenv settings
 mise.toml
+
+# Test database
+test.sqlite3

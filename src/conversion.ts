@@ -69,11 +69,10 @@ export async function convert(request: Request): Promise<RenderData> {
       error: null,
     };
   } catch (error) {
-    const counter = (await getConversionCount()).sum as number;
     return {
       value: "0",
       currency: formData.to,
-      conversionCount: counter,
+      conversionCount: 0,
       error: error as Error,
     };
   }

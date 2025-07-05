@@ -1,7 +1,7 @@
 import { Request } from "express";
 
 import { ConverterData, ConversionResult, RenderData } from "./interface";
-import { addRequest, addResponse, getConversionCount } from "./storage";
+import { addRequest, addResponse, getConversionStats } from "./storage";
 
 const apiKey = process.env.CURRENCYLAYER_API_KEY;
 
@@ -61,18 +61,18 @@ export async function convert(request: Request): Promise<RenderData> {
   try {
     const conversion = await getConversion(formData);
     await addResponse(conversion.result, formData.to);
-    const counter = (await getConversionCount()).sum as number;
+    const stats = await getConversionStats(formData.to);
     return {
       value: conversion.result.toFixed(2),
       currency: formData.to,
-      conversionCount: counter,
+      stats: stats,
       error: null,
     };
   } catch (error) {
     return {
       value: "0",
       currency: formData.to,
-      conversionCount: 0,
+      stats: null,
       error: error as Error,
     };
   }

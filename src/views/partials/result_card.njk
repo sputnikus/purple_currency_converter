@@ -6,9 +6,19 @@
     {{ data.error.message }}
 </div>
 {% else %}
-<div class="result-label">Result</div>
-<div class="result-value">{{ data.value }} {{ data.currency }}</div>
+<div class="result-label stats-tooltip">
+    Result
+    <div class="tooltip-content">
+        Total converted to {{ data.currency }}: {{ data.stats.totalCurrency.sum }} {{ data.currency }}
+    </div>
+</div>
+<div class="result-value stats-tooltip">
+    {{ data.value }} {{ data.currency }}
+    <div class="tooltip-content">
+        Today's conversions to {{ data.currency }}: {{ data.stats.dailyCurrency.count }} ({{ data.stats.dailyCurrency.sum }} {{ data.currency }})
+    </div>
+</div>
 
 <div class="calculation-count-label">Number of conversions made</div>
-<div class="calculation-count">{{ data.conversionCount }}</div>
+<div class="calculation-count">{{ data.stats.total.count }}</div>
 {% endif %}

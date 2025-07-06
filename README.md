@@ -18,12 +18,14 @@ A web-based currency converter application built with TypeScript, Express, and N
 
 ## Environment Setup
 
-1. Configure your CurrencyLayer API key in mise:
+Configure environment variables:
 
 ```bash
 export CURRENCYLAYER_API_KEY=your_api_key_here
 export DATABASE_PATH=path_to_sqlite3_file_here
 ```
+
+> Note: application will use `:memory:` SQLite3 instance if not specified.
 
 ## Getting Started
 
